@@ -37,7 +37,8 @@ struct InitCapFunction {
         /*strictSpace=*/true,
         /*isAscii=*/false,
         /*turkishCasing=*/true,
-        /*greekFinalSigma=*/true>(result, input);
+        /*greekFinalSigma=*/true,
+        /*fullCaseMapping=*/true>(result, input);
   }
 
   FOLLY_ALWAYS_INLINE void callAscii(
