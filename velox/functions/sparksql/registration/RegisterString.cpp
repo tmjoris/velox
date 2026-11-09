@@ -218,7 +218,8 @@ void registerStringFunctions(const std::string& prefix) {
   using SparkUpperFunction = UpperLowerTemplateFunction<
       /*isLower=*/false,
       /*turkishCasing=*/true,
-      /*greekFinalSigma=*/true>;
+      /*greekFinalSigma=*/true,
+      /*fullCaseMapping=*/true>;
   using SparkLowerFunction = UpperLowerTemplateFunction<
       /*isLower=*/true,
       /*turkishCasing=*/true,
