@@ -299,11 +299,14 @@ String Functions
     Returns ``string``, left-padded with pad to a length of ``len``. If ``string`` is
     longer than ``len``, the return value is shortened to ``len`` characters or bytes.
     If ``pad`` is not specified, ``string`` will be padded to the left with space characters
-    if it is a character string, and with zeros if it is a byte sequence. ::
+    if it is a character string, and with zeros if it is a byte sequence.
+    If ``pad`` is empty, no padding is added and ``string`` is only shortened to ``len``
+    characters. ::
 
         SELECT lpad('hi', 5, '??'); -- ???hi
         SELECT lpad('hi', 1, '??'); -- h
         SELECT lpad('hi', 4); --   hi
+        SELECT lpad('hi', 5, ''); -- hi
 
 .. spark:function:: ltrim(string) -> varchar
 
@@ -467,11 +470,14 @@ String Functions
     Returns ``string``, right-padded with ``pad`` to a length of ``len``.
     If ``string`` is longer than ``len``, the return value is shortened to ``len`` characters.
     If ``pad`` is not specified, ``string`` will be padded to the right with space characters
-    if it is a character string, and with zeros if it is a binary string. ::
+    if it is a character string, and with zeros if it is a binary string.
+    If ``pad`` is empty, no padding is added and ``string`` is only shortened to ``len``
+    characters. ::
 
         SELECT lpad('hi', 5, '??'); -- ???hi
         SELECT lpad('hi', 1, '??'); -- h
         SELECT lpad('hi', 4); -- hi
+        SELECT rpad('hi', 5, ''); -- hi
 
 .. spark:function:: rtrim(string) -> varchar
 
