@@ -18,6 +18,8 @@ jobs:
               set -e
               git config --global --add safe.directory /w
               dnf install -y -q --setopt=install_weak_deps=False grpc-devel grpc-plugins
+              source scripts/setup-fedora.sh
+              install_cxl_deps
               BUILD_PROFILE=fedora-debug source .github/scripts/cmake-flags.sh
               export EXTRA_CMAKE_FLAGS="${CMAKE_FLAGS[*]} -DCMAKE_CXX_FLAGS_DEBUG=-g0"
               export MAKEFLAGS="NUM_THREADS=3 MAX_HIGH_MEM_JOBS=2 MAX_LINK_JOBS=1"
