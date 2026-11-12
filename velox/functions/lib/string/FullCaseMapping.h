@@ -24,7 +24,7 @@
 
 namespace facebook::velox::functions::stringCore {
 
-/// Which uppercase mapping upperUnicode applies.
+/// Which mapping upperOrTitleUnicode applies.
 enum class CaseMapping {
   /// One-to-one mapping, from utf8proc_toupper.
   kSimple,
@@ -152,6 +152,26 @@ inline constexpr std::array<FullCaseMapping, 102> kFullCaseMappings{{
     {0xFB17, {0x0544, 0x053D}, {0x0544, 0x056D}}, // ﬗ
 }};
 
+/// Returns true if `codePoint` is in one of the three clusters that
+/// kFullCaseMappings covers: six code points below U+1E96, U+1E96 to U+1FFC,
+/// and U+FB00 to U+FB17. Most non-ASCII text, including CJK, is outside them,
+/// so it skips the binary search.
+constexpr bool inFullCaseMappingClusters(int32_t codePoint) {
+  return codePoint == 0x00DF || codePoint == 0x0149 || codePoint == 0x01F0 ||
+      codePoint == 0x0390 || codePoint == 0x03B0 || codePoint == 0x0587 ||
+      (codePoint >= 0x1E96 && codePoint <= 0x1FFC) ||
+      (codePoint >= 0xFB00 && codePoint <= 0xFB17);
+}
+
+static_assert(
+    std::all_of(
+        kFullCaseMappings.begin(),
+        kFullCaseMappings.end(),
+        [](const auto& entry) {
+          return inFullCaseMappingClusters(entry.codePoint);
+        }),
+    "every kFullCaseMappings entry must be in inFullCaseMappingClusters");
+
 static_assert(
     std::is_sorted(
         kFullCaseMappings.begin(),
@@ -165,9 +185,7 @@ static_assert(
 /// mapping is already correct.
 FOLLY_ALWAYS_INLINE const FullCaseMapping* findFullCaseMapping(
     int32_t codePoint) {
-  // Most text, including all of CJK, falls outside the table's range.
-  if (codePoint < kFullCaseMappings.front().codePoint ||
-      codePoint > kFullCaseMappings.back().codePoint) {
+  if (!inFullCaseMappingClusters(codePoint)) {
     return nullptr;
   }
   const auto* it = std::lower_bound(

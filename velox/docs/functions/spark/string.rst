@@ -223,10 +223,11 @@ String Functions
 
 .. spark:function:: initcap(string) -> varchar
 
-   The ``initcap`` function converts the first character of each word to uppercase
+   The ``initcap`` function converts the first character of each word to titlecase
    and all other characters in the word to lowercase. It supports UTF-8 multibyte
-   characters, up to four bytes per character. The first character of a word uses
-   Unicode full titlecase mapping, where one character can become several.
+   characters, up to four bytes per character. The titlecase conversion uses Unicode
+   full case mapping, where one character can become several, as Spark does with
+   ``spark.sql.icu.caseMappings.enabled`` set to true, its default since Spark 4.0.
 
    A *word* is defined as a sequence of characters separated by whitespace. ::
 
@@ -660,7 +661,8 @@ String Functions
 .. spark:function:: upper(string) -> string
 
     Returns string with all characters changed to uppercase. Uses Unicode full
-    case mapping, where one character can become several. ::
+    case mapping, where one character can become several, as Spark does with
+    ``spark.sql.icu.caseMappings.enabled`` set to true, its default since Spark 4.0. ::
 
         SELECT upper('SparkSql'); -- SPARKSQL
         SELECT upper('straße'); -- STRASSE

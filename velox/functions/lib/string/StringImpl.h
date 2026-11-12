@@ -48,7 +48,7 @@ FOLLY_ALWAYS_INLINE bool upper(TOutString& output, const TInString& input) {
     upperAscii(output.data(), input.data(), input.size());
   } else {
     output.resize(input.size() * 4);
-    auto size = upperUnicode<
+    auto size = upperOrTitleUnicode<
         fullCaseMapping ? CaseMapping::kFullUpper : CaseMapping::kSimple>(
         output.data(), output.size(), input.data(), input.size());
     output.resize(size);
@@ -769,7 +769,7 @@ FOLLY_ALWAYS_INLINE bool initcapUtf8Impl(
       std::memcpy(outputBytes, inputBytes, numBytesRead);
       outputBytes += numBytesRead;
     } else if (isStartOfWord) {
-      auto upperSize = upperUnicode<
+      auto upperSize = upperOrTitleUnicode<
           fullCaseMapping ? CaseMapping::kFullTitle : CaseMapping::kSimple>(
           outputBytes,
           static_cast<size_t>(outputStart + output.size() - outputBytes),

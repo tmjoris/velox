@@ -123,15 +123,16 @@ lowerAscii(char* output, const char* input, size_t length) {
   }
 }
 
-/// Perform upper for utf8 string input, output should be pre-allocated and
-/// large enough for the results. outputLength refers to the number of bytes
-/// available in the output buffer, and inputLength is the number of bytes in
-/// the input string.
-/// @tparam mapping kSimple maps each code point to one code point. kFullUpper
-/// and kFullTitle apply Unicode full case mapping, where one code point can
-/// become up to three, so the output can be up to 3 times the input's size.
+/// Converts a utf8 string to uppercase or titlecase. The output should be
+/// pre-allocated and large enough for the results. outputLength refers to the
+/// number of bytes available in the output buffer, and inputLength is the
+/// number of bytes in the input string.
+/// @tparam mapping kSimple and kFullUpper convert to uppercase, and kFullTitle
+/// converts to titlecase. kSimple maps each code point to one code point. The
+/// full mappings follow Unicode, where one code point can become up to three,
+/// so the output can be up to 3 times the input's size.
 template <CaseMapping mapping>
-FOLLY_ALWAYS_INLINE size_t upperUnicode(
+FOLLY_ALWAYS_INLINE size_t upperOrTitleUnicode(
     char* output,
     size_t outputLength,
     const char* input,
