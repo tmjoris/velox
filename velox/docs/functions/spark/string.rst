@@ -304,7 +304,7 @@ String Functions
 
         SELECT lpad('hi', 5, '??'); -- ???hi
         SELECT lpad('hi', 1, '??'); -- h
-        SELECT lpad('hi', 4); --   hi
+        SELECT lpad('hi', 4); -- '  hi'
         SELECT lpad('hi', 5, ''); -- hi
 
 .. spark:function:: ltrim(string) -> varchar
