@@ -1,0 +1,30 @@
+name: Verify Spark string fixes
+on:
+  push:
+    branches: [assay-verify-5]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+      - name: Free disk space
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL /opt/hostedtoolcache/go /opt/hostedtoolcache/Ruby; df -h /
+      - name: Build and run Spark function tests
+        run: |
+          docker run --rm -v "$PWD:/w" -w /w \
+            -e VELOX_DEPENDENCY_SOURCE=SYSTEM -e LibXml2_SOURCE=BUNDLED -e simdjson_SOURCE=BUNDLED -e gRPC_SOURCE=SYSTEM \
+            ghcr.io/facebookincubator/velox-dev:fedora bash -c '
+              set -e
+              git config --global --add safe.directory /w
+              dnf install -y -q --setopt=install_weak_deps=False grpc-devel grpc-plugins
+              source scripts/setup-fedora.sh
+              install_cxl_deps
+              BUILD_PROFILE=fedora-debug source .github/scripts/cmake-flags.sh
+              export EXTRA_CMAKE_FLAGS="${CMAKE_FLAGS[*]} -DCMAKE_CXX_FLAGS_DEBUG=-g0"
+              export MAKEFLAGS="NUM_THREADS=3 MAX_HIGH_MEM_JOBS=2 MAX_LINK_JOBS=1"
+              make debug TARGETS="velox_functions_spark_test velox_functions_string_test"
+              _build/debug/velox/functions/sparksql/tests/velox_functions_spark_test --gtest_brief=1
+              _build/debug/velox/functions/lib/string/tests/velox_functions_string_test --gtest_brief=1
+              _build/debug/velox/functions/sparksql/tests/velox_functions_spark_test --gtest_filter="*pad*:UpperLowerTest*:InitcapTest*"
+            '
