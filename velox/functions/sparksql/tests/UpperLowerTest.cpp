@@ -155,6 +155,8 @@ TEST_F(UpperLowerTest, upperUnicode) {
   EXPECT_EQ("\u00C9A", upper("\u00E9a"));
   EXPECT_EQ("\u0391\u0399", upper("\u1FB3"));
   EXPECT_EQ("\u1C90", upper("\u10D0"));
+  // Inside the table's clusters but not in the table.
+  EXPECT_EQ("\u1F08", upper("\u1F00"));
 
   // Every character expands to three, so the output is 3 times the input.
   std::string input;

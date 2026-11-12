@@ -173,17 +173,17 @@ FOLLY_ALWAYS_INLINE size_t upperOrTitleUnicode(
       }
     }
 
-    auto upperCodePoint = mapping == CaseMapping::kFullTitle
+    auto mappedCodePoint = mapping == CaseMapping::kFullTitle
         ? utf8proc_totitle(nextCodePoint)
         : utf8proc_toupper(nextCodePoint);
 
     assert(
-        (outputIdx + utf8proc_codepoint_length(upperCodePoint)) <
+        (outputIdx + utf8proc_codepoint_length(mappedCodePoint)) <
             outputLength &&
         "access out of bound");
 
     auto newSize = utf8proc_encode_char(
-        upperCodePoint, reinterpret_cast<unsigned char*>(&output[outputIdx]));
+        mappedCodePoint, reinterpret_cast<unsigned char*>(&output[outputIdx]));
     outputIdx += newSize;
   }
   return outputIdx;

@@ -661,8 +661,7 @@ String Functions
 .. spark:function:: upper(string) -> string
 
     Returns string with all characters changed to uppercase. Uses Unicode full
-    case mapping, where one character can become several, as Spark does with
-    ``spark.sql.icu.caseMappings.enabled`` set to true, its default since Spark 4.0. ::
+    case mapping, where one character can become several. ::
 
         SELECT upper('SparkSql'); -- SPARKSQL
         SELECT upper('straße'); -- STRASSE

@@ -769,13 +769,13 @@ FOLLY_ALWAYS_INLINE bool initcapUtf8Impl(
       std::memcpy(outputBytes, inputBytes, numBytesRead);
       outputBytes += numBytesRead;
     } else if (isStartOfWord) {
-      auto upperSize = upperOrTitleUnicode<
+      auto mappedSize = upperOrTitleUnicode<
           fullCaseMapping ? CaseMapping::kFullTitle : CaseMapping::kSimple>(
           outputBytes,
           static_cast<size_t>(outputStart + output.size() - outputBytes),
           inputBytes,
           numBytesRead);
-      outputBytes += upperSize;
+      outputBytes += mappedSize;
       isStartOfWord = false;
     } else {
       auto lowerSize = lowerUnicode<turkishCasing, greekFinalSigma>(
