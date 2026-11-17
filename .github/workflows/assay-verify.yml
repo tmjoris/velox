@@ -1,7 +1,7 @@
 name: Verify Spark string fixes
 on:
   push:
-    branches: [assay-verify-5]
+    branches: [assay-verify-6]
 jobs:
   test:
     runs-on: ubuntu-latest
